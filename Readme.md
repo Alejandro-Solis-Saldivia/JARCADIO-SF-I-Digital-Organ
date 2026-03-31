@@ -2,7 +2,7 @@
 
 JARCADIO SF-I is a professional-grade web-based digital organ and synthesizer. It offers a low-latency musical experience directly in the browser, featuring multi-touch support, octave control, and a responsive design optimized for both desktop and mobile devices.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-gold.svg)](https://alejandro-solis.epizy.com/Developed_Projects/Keyboard/)
+https://github.com/user-attachments/assets/289f0ed9-4990-42aa-9254-450e1ca914c2
 
 ## 🚀 Live Preview
 You can try the fully functional synthesizer here: [JARCADIO SF-I Live Demo](https://alejandro-solis.epizy.com/Developed_Projects/Keyboard/)
