@@ -36,7 +36,7 @@ To run this project locally and explore the source code, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/tu-usuario/JARCADIO-SF-I-Digital-Organ.git
+   git clone https://github.com/Alejandro-Solis-Saldivia/JARCADIO-SF-I-Digital-Organ.git
    cd JARCADIO-SF-I-Digital-Organ
    ```
 
