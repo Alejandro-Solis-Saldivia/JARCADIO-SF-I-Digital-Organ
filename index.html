@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    ============================================================
+    JARCADIO SF-I — Digital Organ & Synthesizer
+    ============================================================
+      Developed by : Alejandro Jose Solis Saldivia
+      Assistance AI : Claude (Anthropic) - claude.ai
+      Version : 1.0.0 
+      Date : 2025
+    ============================================================
+      Technologies and Libraries:
+
+      • Tone.js 14.x     —  Audio Web Sound Engine
+                            https://tonejs.github.io/ | MIT License
+      • Web Audio API    —  Native browser audio API
+                            https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
+      • Touch Events API —  Native multi-touch support
+                            https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+      • Screen Orientation API —  Detection of orientation
+                            https://developer.mozilla.org/en-US/docs/Web/API/Screen_Orientation_API
+      • Google Fonts     —  Bebas Neue + Space Mono
+                            https://fonts.google.com/ | SIL Open Font License
+    ============================================================
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>JARCADIO SF-I — Digital Organ &amp; Synthesizer</title>
+
+  <!-- Tone.js: audio sound engine -->
+  <script src="Tone.js"></script>
+  <!-- script.js: JavaScript code -->
+  <script src="script.js"></script>
+  <!-- style.css: page style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Bebas Neue (display) + Space Mono (monoespaciada) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+  <!-- ============================================================
+        ORIENTATION OVERLAY
+       ============================================================ -->
+  <div id="orientation-overlay" role="dialog" aria-label="Rota tu dispositivo">
+    <div class="orient-icon">📱</div>
+    <div class="orient-line"></div>
+    <div class="orient-title">Rotate your device <br>(Rota tu dispositivo)</div>
+    <div class="orient-sub">
+      The keyboard requires horizontal orientation<br>
+for optimal experience.<br><br>
+      (El teclado necesita orientación horizontal<br>
+      para una experiencia óptima).
+    </div>
+    <div class="orient-line"></div>
+  </div>
+
+  <!-- ============================================================
+       CABINET
+  ============================================================ -->
+  <div class="cabinet">
+
+    <div class="header">
+      <div class="brand">
+        <div class="brand-name">JARCADIO SF-I</div>
+        <div class="brand-sub">Digital Organ &amp; Synthesizer</div>
+      </div>
+
+      <div class="controls">
+        <!-- LED -->
+        <div class="control-group" style="width: 22%; height: 50%;">
+          <div class="led-display">
+            <div class="led-note" id="led-note">---</div>
+            <div class="led-oct"  id="led-oct">OCTAVE 4</div>
+          </div>
+        </div>
+        <!-- VU Meter -->
+        <div class="control-group" style="width: 9%; height: 46%;">
+          <div class="vu-group" id="vu-meter">
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+            <div class="vu-bar" style="height:5px"></div>
+          </div>
+          <div class="control-label">Level</div>
+        </div>
+        <!-- Timbre -->
+        <div class="control-group" style="width: 17%; height: 34%;">
+          <select class="styled-select" id="timbre-select" onchange="changeTimbre(this.value)">
+            <option value="organ">Organ</option>
+            <option value="piano">Piano</option>
+            <option value="synth">Synth Lead</option>
+            <option value="pad">Soft Pad</option>
+            <option value="strings">Strings</option>
+            <option value="bass">Bass</option>
+          </select>
+          <div class="control-label">Tone</div>
+        </div>
+        <!-- Volume -->
+        <div class="control-group" style="width: 17%; height: 16%;">
+          <input type="range" class="styled-range" id="vol-knob"
+                 min="-30" max="0" value="-6" oninput="changeVolume(this.value)">
+          <div class="control-label" style="margin-top:5px;">Volume</div>
+        </div>
+        <!-- Reverb -->
+        <div class="control-group" style="width: 17%; height: 16%;">
+          <input type="range" class="styled-range" id="reverb-knob"
+                 min="0" max="1" step="0.01" value="0.3" oninput="changeReverb(this.value)">
+          <div class="control-label"style="margin-top:5px;">Reverb</div>
+        </div>
+        
+        <!-- Octave -->
+        <div class="control-group" style="left: -62%; position: relative; width: 17%; height: 21%; flex-direction:row; gap:5px; align-items:center; text-align:center;">
+          <button class="toggle-btn" onclick="changeOctave(-1)" style="width: 35%;">◀</button>
+          <div style="font-size:10px;color:var(--gold);width:30%;text-align:center;"
+               id="oct-display">4</div>
+          <button class="toggle-btn" onclick="changeOctave(1)" style="width: 35%;">▶</button>
+        </div>
+        <!-- Sustain -->
+        <div class="control-group" style="left: -44.5%; position: relative; width: 14%; height: 34%;">
+          <button class="toggle-btn" id="sustain-btn" onclick="toggleSustain()" style="width: 100%;">SUSTAIN</button>
+          <div class="control-label">Pedal</div>
+        </div>
+      </div>
+    </div><!-- /.header -->
+
+    <div class="ribbon">
+      <div class="ribbon-line"></div>
+      <div class="ribbon-text">✦ Keyboard Controller ✦</div>
+      <div class="ribbon-line"></div>
+    </div>
+
+    <div class="keyboard-section" id="keyboard-section">
+      <div class="keyboard" id="keyboard"></div>
+      <div class="octave-bar" id="oct-dots"></div>
+    </div>
+
+    <div class="keymap" id="keymap"></div>
+
+    <div class="footer">
+      Powered by Tone.js &nbsp;·&nbsp; Web Audio API &nbsp;·&nbsp; MIT License
+    </div>
+
+  </div><!-- /.cabinet -->
+
+
+  <script>
+ /* ──────────────────────────────────────────────
+      INITIALIZATION
+    ────────────────────────────────────────────── */
+    window.addEventListener('load', () => {
+      buildKeyboard();
+      updateOctaveDots();
+      buildKeymap();
+      checkOrientation();
+      tryLockOrientation();
+    });
+
+  </script>
+</body>
+</html>
